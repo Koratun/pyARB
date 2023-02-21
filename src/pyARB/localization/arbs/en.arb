@@ -1,0 +1,56 @@
+{
+  "appTitle": "Involio",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "investmentCreatedAt": "Opened: {date} at {time}",
+  "@investmentCreatedAt": {
+    "description": "Displays a position's creation date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "assetInvestments": "{assetName} Investments",
+  "@assetInvestments": {
+    "placeholders": {
+      "assetName": {}
+    }
+  },
+  "followersCount": "{amount} Followers",
+  "@followersCount": {
+    "description": "Displays user's follower count",
+    "placeholders": {
+      "amount": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "no": "No",
+  "@no": {},
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "joinedDate": "Joined {date}",
+  "@joinedDate": {
+    "description": "When a user signed up",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "manyItems": "{first} and {count} others",
+  "@manyItems": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "count": {}
+    }
+  }
+}

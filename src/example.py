@@ -13,4 +13,4 @@ if __name__ == "__main__":
     print(t.notification_requested_to_follow("Koratun", 2))
     print(t.notification_requested_to_follow("Koratun", 3))
     print(t.notification_requested_to_follow("Koratun", 1254))
-    print(Translator.followers_count_(Lang.es_ES, 6851651))
+    print(Translator.followers_count_static(Lang.es_ES, 6851651))

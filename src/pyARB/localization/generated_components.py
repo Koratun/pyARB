@@ -36,10 +36,10 @@ class Translator:
         """
         `No`
         """
-        return self.no_(self.lang)
+        return self.no_static(self.lang)
 
     @staticmethod
-    def no_(lang: Lang):
+    def no_static(lang: Lang):
         """
         `No`
         """
@@ -55,10 +55,10 @@ class Translator:
             date: String
             time: String
         """
-        return self.investment_created_at_(self.lang, date, time)
+        return self.investment_created_at_static(self.lang, date, time)
 
     @staticmethod
-    def investment_created_at_(lang: Lang, date: str, time: str):
+    def investment_created_at_static(lang: Lang, date: str, time: str):
         """
         `Opened: {date} at {time}`
 
@@ -83,14 +83,14 @@ class Translator:
 
         Placeholders:
             amount: {
-                "type": "int"
-                "format": "compact"
+                type: int
+                format: compact
             }
         """
-        return self.followers_count_(self.lang, amount)
+        return self.followers_count_static(self.lang, amount)
 
     @staticmethod
-    def followers_count_(lang: Lang, amount: int):
+    def followers_count_static(lang: Lang, amount: int):
         """
         `{amount} Followers`
 
@@ -98,8 +98,8 @@ class Translator:
 
         Placeholders:
             amount: {
-                "type": "int"
-                "format": "compact"
+                type: int
+                format: compact
             }
         """
         return Translator._localize(
@@ -117,14 +117,14 @@ class Translator:
         Placeholders:
             username: String
             count: {
-                "type": "int",
-                "format": "compact"
+                type: int,
+                format: compact
             }
         """
-        return self.notification_requested_to_follow_(self.lang, username, count)
+        return self.notification_requested_to_follow_static(self.lang, username, count)
 
     @staticmethod
-    def notification_requested_to_follow_(lang: Lang, username: str, count: int):
+    def notification_requested_to_follow_static(lang: Lang, username: str, count: int):
         """
         `@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!`
 
@@ -133,8 +133,8 @@ class Translator:
         Placeholders:
             username: String
             count: {
-                "type": "int",
-                "format": "compact"
+                type: int
+                format: compact
             }
         """
         return Translator._localize(

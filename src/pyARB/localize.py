@@ -13,9 +13,16 @@ log = Logger("pyARB")
 
 
 class Placeholder:
-    def __init__(self, name: str, format=None):
+    def __init__(self, name: str):
         self.name = name
-        self.format = format
+        self.example = None
+        self.description = None
+
+    def get_docstring(self) -> str:
+        return " " * 12 + self.name + ": String\n"
+
+    def get_code(self) -> str:
+        return " " * 12 + f'Placeholder("{self.name}").set({self.name}),\n'
 
     def set(self, value: str):
         self.value = value
@@ -46,9 +53,39 @@ class NumType(Enum):
 
 class PlaceholderNum(Placeholder):
     def __init__(self, name: str, format: NumFormat = None, num_type: NumType = NumType.num, **kwargs):
-        super().__init__(name, format=format)
+        super().__init__(name)
+        self.format = format
         self.num_type = num_type
         self.optional_parameters = kwargs
+
+    def get_docstring(self) -> str:
+        if not self.format:
+            return " " * 12 + self.name + f": {self.num_type.name}\n"
+        doc = " " * 12 + self.name + ": {\n"
+        doc += " " * 16 + f"type: {self.num_type.name}\n"
+        doc += " " * 16 + f"format: {self.format.name}\n"
+        if self.example:
+            doc += " " * 16 + f"example: {self.example}\n"
+        if self.description:
+            doc += " " * 16 + f"description: {self.description}\n"
+        if self.optional_parameters:
+            doc += " " * 16 + "optionalParameters: {\n"
+            for k, v in self.optional_parameters.items():
+                doc += " " * 20 + f"{k}: {v}\n"
+            doc += " " * 16 + "}\n"
+        return doc + " " * 12 + "}\n"
+
+    def get_code(self) -> str:
+        args = [f'"{self.name}"']
+        if self.format:
+            args.append(f"format=NumFormat.{self.format.name}")
+        if self.num_type != NumType.num:
+            args.append(f"num_type=NumType.{self.num_type.name}")
+        if self.optional_parameters:
+            args.extend(
+                k + "=" + (f'"{v}"' if isinstance(v, str) else str(v)) for k, v in self.optional_parameters.items()
+            )
+        return " " * 12 + f'Placeholder({", ".join(_ for _ in args)}).set({self.name}),\n'
 
     def _round_or_int(self, value: float, digits: int, recurse=True):
         if value == int(value):

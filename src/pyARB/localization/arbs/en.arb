@@ -42,5 +42,18 @@
       },
       "count": {}
     }
+  },
+  "notificationRequestedToFollow": "@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!",
+  "@notificationRequestedToFollow": {
+    "description": "When 1 or more users request to follow someone they receive this notification",
+    "placeholders": {
+      "username": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
   }
 }

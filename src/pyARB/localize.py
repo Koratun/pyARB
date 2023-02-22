@@ -1,11 +1,11 @@
 import json
 import os
-from typing import Type, TypeVar
+from typing import Type
 from enum import Enum
 from logging import Logger
 import re
 
-from exceptions import InvalidFormat
+from .exceptions import InvalidFormat
 
 log = Logger("pyARB")
 
@@ -63,7 +63,11 @@ class PlaceholderNum(Placeholder):
         while value >= 1000:
             u += 1
             value /= 1000
-        return str(self._round_or_int(value, digits)) + units[u]
+        double_check = self._round_or_int(value, digits)
+        if double_check >= 1000:
+            u += 1
+            double_check /= 1000
+        return str(self._round_or_int(double_check, digits)) + units[u]
 
     def _readable_long(self, value, digits):
         return f"{value:,.{digits}f}"
@@ -107,11 +111,8 @@ class PlaceholderNum(Placeholder):
         return f"{value:,}"
 
 
-T = TypeVar("T", Type[Enum])
-
-
-def read_translations(arb_location: str, languages: T):
-    translations: dict[T, dict[str, str]] = {}
+def read_translations(arb_location: str, languages: Type[Enum]):
+    translations: dict[Type[Enum], dict[str, str]] = {}
     for lang in languages:
         arb_file = arb_location + "/" + lang.name + ".arb"
         if not os.path.exists(arb_file):
@@ -161,7 +162,7 @@ def _split_select_cases(selectable: str):
     key = ""
     # Check if there is an offset for plurals
     offset = 0
-    if m:=re.match(r"^offset:([-\d]\d*)", selectable):
+    if m := re.match(r"^offset:([-\d]\d*)", selectable):
         offset = int(m.groups()[0])
         end = len(m.group())
 
@@ -186,14 +187,17 @@ def _split_select_cases(selectable: str):
     return cases, end, offset
 
 
-def inject_placeholders(text: str, *placeholders: Placeholder):
+def inject_placeholders(text: str, *placeholders: Placeholder, num_shorthand: PlaceholderNum = None):
+    if num_shorthand:
+        text = re.sub(r"(?<!\\)(#)", num_shorthand.get(), text)
+        text = text.replace("\\#", "#")
     for var in placeholders:
         if "{" + var.name + "}" in text:
             text = text.replace("{" + var.name + "}", var.get())
         # Check for Selects or Plurals
         elif (l := text.find("{" + var.name)) >= 0:
             l += len(var.name) + 2
-            select_type = text[l : case_start := text.find(",", l)]
+            select_type = text[l : (case_start := text.find(",", l))]
             if select_type == "select":
                 cases, select_end, offset = _split_select_cases(text[case_start + 1 :])
                 if offset != 0:
@@ -207,7 +211,7 @@ def inject_placeholders(text: str, *placeholders: Placeholder):
                 cases, select_end, offset = _split_select_cases(text[case_start + 1 :])
                 exact = f"={var.value}"
                 if exact in cases:
-                    inner = inject_placeholders(cases[exact], *placeholders)
+                    inner = inject_placeholders(cases[exact], *placeholders, num_shorthand=var)
                 else:
                     val = abs(var.value - offset)
                     if val == 0:
@@ -221,11 +225,11 @@ def inject_placeholders(text: str, *placeholders: Placeholder):
                     else:
                         offseted = "many"
                     if offseted not in cases:
-                        log.warn(f"Plural in `{text}` does not have a case for `{var.value}`; using `other`")
-                        inner = inject_placeholders(cases["other"], *placeholders)
+                        # log.warn(f"Plural in `{text}` does not have a case for `{var.value}`; using `other`")
+                        inner = inject_placeholders(cases["other"], *placeholders, num_shorthand=var)
                     else:
-                        inner = inject_placeholders(cases[offseted], *placeholders)
+                        inner = inject_placeholders(cases[offseted], *placeholders, num_shorthand=var)
             else:
                 raise InvalidFormat(f"Expected select or plural but got `{select_type}` in `{text}`")
-            text = text[:l-(len(var.name) + 2)] + inner + text[case_start + 1 + select_end:]
+            text = text[: l - (len(var.name) + 2)] + inner + text[case_start + 1 + select_end :]
     return text

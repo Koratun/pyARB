@@ -75,7 +75,7 @@ class Translator:
             Placeholder("time").set(time),
         )
 
-    def followers_count(self, date: str, time: str):
+    def followers_count(self, amount: int):
         """
         `{amount} Followers`
 
@@ -87,7 +87,7 @@ class Translator:
                 "format": "compact"
             }
         """
-        return self.followers_count_(self.lang, date, time)
+        return self.followers_count_(self.lang, amount)
 
     @staticmethod
     def followers_count_(lang: Lang, amount: int):
@@ -106,4 +106,40 @@ class Translator:
             lang,
             "followersCount",
             PlaceholderNum("amount", format=NumFormat.compact, num_type=NumType.int).set(amount),
+        )
+
+    def notification_requested_to_follow(self, username: str, count: int):
+        """
+        `@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!`
+
+        Description: When 1 or more users request to follow someone they receive this notification
+
+        Placeholders:
+            username: String
+            count: {
+                "type": "int",
+                "format": "compact"
+            }
+        """
+        return self.notification_requested_to_follow_(self.lang, username, count)
+
+    @staticmethod
+    def notification_requested_to_follow_(lang: Lang, username: str, count: int):
+        """
+        `@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!`
+
+        Description: When 1 or more users request to follow someone they receive this notification
+
+        Placeholders:
+            username: String
+            count: {
+                "type": "int",
+                "format": "compact"
+            }
+        """
+        return Translator._localize(
+            lang,
+            "notificationRequestedToFollow",
+            Placeholder("username").set(username),
+            PlaceholderNum("count", format=NumFormat.compact, num_type=NumType.int).set(count),
         )

@@ -60,3 +60,46 @@ def generate_localizations(arb_location: str, locales: list[str], target_directo
             keys[k[1:]].process_metadata(v)
         else:
             raise UnsupportedFormat(f"Expected to find `@{k}` after original `{k}`")
+
+    def tab(n: int):
+        return " " * n * 4
+
+    with open(os.path.join(target_directory, "generated_components.py"), "w") as f:
+        f.write("from enum import Enum\n")
+        f.write(
+            "from pyARB.localize import log, read_translations, inject_placeholders, Placeholder, PlaceholderNum, NumFormat, NumType\n\n\n"
+        )
+
+        f.write("class Lang(Enum):\n")
+        for l in locales:
+            f.write(tab(1) + f'{l} = "{l}"\n')
+
+        f.write(f'\n\nTRANSLATIONS = read_translations("{arb_location}", Lang)\n')
+        f.write(f"FALLBACK_LANG = Lang.{locales[0]}\n\n")
+
+        f.write(
+            """
+class Translator:
+    def __init__(self, lang: Lang):
+        self.lang = lang
+
+    @staticmethod
+    def _key_check(lang: Lang, key: str):
+        if lang in TRANSLATIONS:
+            if key in TRANSLATIONS[lang]:
+                return True
+            log.error(f"{lang.name}.arb does not have key `{key}`")
+        return False
+
+    @staticmethod
+    def _localize(lang: Lang, key: str, *placeholders: Placeholder):
+        if Translator._key_check(lang, key):
+            return inject_placeholders(TRANSLATIONS[lang][key], *placeholders)
+        if Translator._key_check(FALLBACK_LANG, key):
+            return inject_placeholders(TRANSLATIONS[FALLBACK_LANG][key], *placeholders)
+        log.error(f"Key `{key}` not found in requested or fallback langs!!!")
+        return key
+"""
+        )
+
+        # Loop through keys to create instance and static methods

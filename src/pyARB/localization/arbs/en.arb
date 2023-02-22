@@ -1,8 +1,4 @@
 {
-  "appTitle": "Involio",
-  "@appTitle": {
-    "description": "The title of the application"
-  },
   "investmentCreatedAt": "Opened: {date} at {time}",
   "@investmentCreatedAt": {
     "description": "Displays a position's creation date",
@@ -13,12 +9,6 @@
       "time": {
         "type": "String"
       }
-    }
-  },
-  "assetInvestments": "{assetName} Investments",
-  "@assetInvestments": {
-    "placeholders": {
-      "assetName": {}
     }
   },
   "followersCount": "{amount} Followers",

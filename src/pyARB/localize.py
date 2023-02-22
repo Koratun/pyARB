@@ -3,8 +3,9 @@ import os
 from typing import Type, TypeVar
 from enum import Enum
 from logging import Logger
+import re
 
-from exceptions import UnsupportedFormat
+from exceptions import InvalidFormat
 
 log = Logger("pyARB")
 
@@ -20,7 +21,7 @@ class Placeholder:
         self.value = value
         return self
 
-    def get(self):
+    def get(self) -> str:
         return self.value
 
 
@@ -71,7 +72,7 @@ class PlaceholderNum(Placeholder):
         self.value = value
         return self
 
-    def get(self):
+    def get(self) -> str:
         value = self.value
         if self.format == NumFormat.compact:
             return self._compact(value, 1)
@@ -121,9 +122,110 @@ def read_translations(arb_location: str, languages: T):
                 arb: dict[str, str] = json.loads(f.read())
             for k, v in arb.items():
                 if "@" not in k:
-                    translations[lang][k] = v
+                    # purify whitespace
+                    purified = ""
+                    layer = 0
+                    for c in v:
+                        if layer % 2 == 1 and c in {" ", "\n", "\t"}:
+                            continue
+                        if c == "{":
+                            layer += 1
+                        elif c == "}":
+                            layer -= 1
+                        if layer < 0:
+                            raise InvalidFormat(f"`{lang} -> {k} -> {v}` has invalid brackets")
+                        purified += c
+                    if layer != 0:
+                        raise InvalidFormat(f"`{lang} -> {k} -> {v}` has invalid brackets")
+                    translations[lang][k] = purified
     return translations
 
 
-def translate(text: str, *placeholders: Placeholder):
-    pass
+def _split_select_cases(selectable: str):
+    """
+    Could be passed a string with content beyond the end of the select cases
+    such as `male{He}female{She}other{They}} went to {storeName}.`
+
+    Will return: {
+        male: "He"
+        female: "She"
+        other: "They"
+    }
+
+    It is an error to not specify the `other` case in any select.
+    """
+    brackets = 1
+    end = 0
+    cases = {}
+    buffer = ""
+    key = ""
+    # Check if there is an offset for plurals
+    offset = 0
+    if m:=re.match(r"^offset:([-\d]\d*)", selectable):
+        offset = int(m.groups()[0])
+        end = len(m.group())
+
+    while brackets > 0:
+        if selectable[end] == "{":
+            brackets += 1
+            if brackets == 2:
+                key = buffer
+                buffer = ""
+            else:
+                buffer += "{"
+        elif selectable[end] == "}":
+            brackets -= 1
+            if brackets == 1:
+                cases[key] = buffer
+                buffer = ""
+            else:
+                buffer += "}"
+        else:
+            buffer += selectable[end]
+        end += 1
+    return cases, end, offset
+
+
+def inject_placeholders(text: str, *placeholders: Placeholder):
+    for var in placeholders:
+        if "{" + var.name + "}" in text:
+            text = text.replace("{" + var.name + "}", var.get())
+        # Check for Selects or Plurals
+        elif (l := text.find("{" + var.name)) >= 0:
+            l += len(var.name) + 2
+            select_type = text[l : case_start := text.find(",", l)]
+            if select_type == "select":
+                cases, select_end, offset = _split_select_cases(text[case_start + 1 :])
+                if offset != 0:
+                    raise InvalidFormat(f"Only a plural may specify an offset. Offset found in `{text}`.")
+                if var.value not in cases:
+                    log.warn(f"Select in `{text}` does not have a case for `{var.value}`; using `other`")
+                    inner = inject_placeholders(cases["other"], *placeholders)
+                else:
+                    inner = inject_placeholders(cases[var.value], *placeholders)
+            elif select_type == "plural":
+                cases, select_end, offset = _split_select_cases(text[case_start + 1 :])
+                exact = f"={var.value}"
+                if exact in cases:
+                    inner = inject_placeholders(cases[exact], *placeholders)
+                else:
+                    val = abs(var.value - offset)
+                    if val == 0:
+                        offseted = "zero"
+                    elif val == 1:
+                        offseted = "one"
+                    elif val == 2:
+                        offseted = "two"
+                    elif val < 20:
+                        offseted = "few"
+                    else:
+                        offseted = "many"
+                    if offseted not in cases:
+                        log.warn(f"Plural in `{text}` does not have a case for `{var.value}`; using `other`")
+                        inner = inject_placeholders(cases["other"], *placeholders)
+                    else:
+                        inner = inject_placeholders(cases[offseted], *placeholders)
+            else:
+                raise InvalidFormat(f"Expected select or plural but got `{select_type}` in `{text}`")
+            text = text[:l-(len(var.name) + 2)] + inner + text[case_start + 1 + select_end:]
+    return text

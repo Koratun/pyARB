@@ -1,7 +1,7 @@
 from pyARB.localization.generated_components import Translator, Lang
 
 if __name__ == "__main__":
-    t = Translator(Lang.en)
+    t = Translator(Lang.en_US)
     print(t.no())
     print(t.investment_created_at("01/01/2023", "4:30 PM"))
     print(t.followers_count(1000))
@@ -13,3 +13,4 @@ if __name__ == "__main__":
     print(t.notification_requested_to_follow("Koratun", 2))
     print(t.notification_requested_to_follow("Koratun", 3))
     print(t.notification_requested_to_follow("Koratun", 1254))
+    print(Translator.followers_count_(Lang.es_ES, 6851651))

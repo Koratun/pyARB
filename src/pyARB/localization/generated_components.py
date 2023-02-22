@@ -3,12 +3,12 @@ from pyARB.localize import log, read_translations, inject_placeholders, Placehol
 
 
 class Lang(Enum):
-    en = "en"
-    es = "es"
+    en_US = "en_US"
+    es_ES = "es_ES"
 
 
 TRANSLATIONS = read_translations("src/pyARB/localization/arbs", Lang)
-FALLBACK_LANG = Lang.en
+FALLBACK_LANG = Lang.en_US
 
 
 class Translator:
@@ -29,7 +29,7 @@ class Translator:
             return inject_placeholders(TRANSLATIONS[lang][key], *placeholders)
         if Translator._key_check(FALLBACK_LANG, key):
             return inject_placeholders(TRANSLATIONS[FALLBACK_LANG][key], *placeholders)
-        log.error(f"key `{key}` not found in requested or fallback langs!!!")
+        log.error(f"Key `{key}` not found in requested or fallback langs!!!")
         return key
 
     def no(self):

@@ -226,9 +226,9 @@ def inject_placeholders(text: str, *placeholders: Placeholder, num_shorthand: Pl
                         offseted = "many"
                     if offseted not in cases:
                         # log.warn(f"Plural in `{text}` does not have a case for `{var.value}`; using `other`")
-                        inner = inject_placeholders(cases["other"], *placeholders, num_shorthand=var)
+                        inner = inject_placeholders(cases["other"], *placeholders, num_shorthand=var.set(val))
                     else:
-                        inner = inject_placeholders(cases[offseted], *placeholders, num_shorthand=var)
+                        inner = inject_placeholders(cases[offseted], *placeholders, num_shorthand=var.set(val))
             else:
                 raise InvalidFormat(f"Expected select or plural but got `{select_type}` in `{text}`")
             text = text[: l - (len(var.name) + 2)] + inner + text[case_start + 1 + select_end :]

@@ -5,6 +5,8 @@
 
 A localization library for python utilizing the ARB format for Flutter.
 
+[Changelog](./CHANGELOG.md)
+
 ## Usage
 
 pyARB takes a primary .arb file and generates a python code equivalent.

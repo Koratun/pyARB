@@ -1,6 +1,6 @@
 # pyARB
 
-![PyPI](https://img.shields.io/pypi/v/pyARB)
+[![PyPI](https://img.shields.io/pypi/v/pyARB)](https://pypi.org/project/pyARB/)
 ![PyPI - License](https://img.shields.io/pypi/l/pyARB)
 
 A localization library for python utilizing the ARB format for Flutter.

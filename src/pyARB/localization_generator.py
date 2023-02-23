@@ -4,8 +4,8 @@ import json
 import re
 from tqdm import tqdm
 
-from .localize import Placeholder, PlaceholderNum, NumFormat, NumType
-from .exceptions import UnsupportedFormat, DuplicateKey
+from localize import Placeholder, PlaceholderNum, NumFormat, NumType
+from exceptions import UnsupportedFormat, DuplicateKey
 
 
 def tab(n: int):
@@ -114,12 +114,19 @@ class ArbKey:
 
 
 def generate_localizations(arb_location: str, locales: list[str], target_directory: str = None):
+    arb_location = arb_location.replace("\\", "/")
+    if arb_location.endswith("/"):
+        arb_location = arb_location[:-1]
+
     if not os.path.exists(arb_location):
         raise FileNotFoundError(arb_location + " does not exist")
 
     if not target_directory:
         target_directory = os.path.dirname(arb_location)
     elif not os.path.exists(target_directory):
+        target_directory = target_directory.replace("\\", "/")
+        if target_directory.endswith("/"):
+            target_directory = target_directory[:-1]
         raise FileNotFoundError(target_directory + " does not exist")
 
     primary_arb = os.path.join(arb_location, locales[0] + ".arb")
@@ -181,7 +188,7 @@ class Translator:
         )
 
         # Loop through keys to create instance and static methods
-        print("Generating Keys...")
+        print("Generating localizations...")
         for v in tqdm(keys.values(), ncols=50):
             f.write(v.print_methods())
 

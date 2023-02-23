@@ -17,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.scripts]
+pyarb = "pyARB.__main__:main"
+
 [project.urls]
 "Homepage" = "https://github.com/Koratun/pyARB"
 "Bug Tracker" = "https://github.com/Koratun/pyARB/issues"

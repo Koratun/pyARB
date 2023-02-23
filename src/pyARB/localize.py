@@ -5,7 +5,7 @@ from enum import Enum
 from logging import Logger
 import re
 
-from .exceptions import InvalidFormat
+from exceptions import InvalidFormat
 
 log = Logger("pyARB")
 

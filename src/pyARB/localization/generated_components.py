@@ -7,7 +7,7 @@ class Lang(Enum):
     es_ES = "es_ES"
 
 
-TRANSLATIONS = read_translations("src/pyARB/localization/arbs", Lang)
+TRANSLATIONS = read_translations("./src/pyARB/localization/arbs", Lang)
 FALLBACK_LANG = Lang.en_US
 
 

@@ -1,5 +1,5 @@
 {
-  "investmentCreatedAt": "Opened: {date} at {time}",
+  "investmentCreatedAt": "Abrido: {date} a las {time}",
   "@investmentCreatedAt": {
     "description": "Displays a position's creation date",
     "placeholders": {
@@ -11,7 +11,7 @@
       }
     }
   },
-  "followersCount": "{amount} Followers",
+  "followersCount": "{amount} Seguidores",
   "@followersCount": {
     "description": "Displays user's follower count",
     "placeholders": {
@@ -23,29 +23,27 @@
   },
   "no": "No",
   "@no": {},
-  "cancel": "Cancel",
+  "cancel": "Cancela",
   "@cancel": {
     "description": "Cancel button"
   },
-  "joinedDate": "Joined {date}",
+  "joinedDate": "Unido en la {date}",
   "@joinedDate": {
     "description": "When a user signed up",
     "placeholders": {
       "date": {}
     }
   },
-  "manyItems": "{first} and {count} others",
+  "manyItems": "{first} y {count} más",
   "@manyItems": {
     "placeholders": {
       "first": {
         "type": "String"
       },
-      "count": {
-        "type": "int"
-      }
+      "count": {}
     }
   },
-  "notificationRequestedToFollow": "@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!",
+  "notificationRequestedToFollow": "¡@{username} {count, plural, offset:1 zero{quiere seguirle} one{y un otro usario quieren seguirle} other{y # otros usarios quierien seguirle}}!",
   "@notificationRequestedToFollow": {
     "description": "When 1 or more users request to follow someone they receive this notification",
     "placeholders": {

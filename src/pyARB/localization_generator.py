@@ -1,14 +1,93 @@
 import os
+import shutil
 import json
+import re
+from tqdm import tqdm
 
 from .localize import Placeholder, PlaceholderNum, NumFormat, NumType
-from .exceptions import UnsupportedFormat
+from .exceptions import UnsupportedFormat, DuplicateKey
+
+
+def tab(n: int):
+    return " " * n * 4
 
 
 class ArbKey:
     def __init__(self, key: str, native_value: str):
         self.key = key
+        self.snake_key = re.sub("(.)([A-Z])", r"\1_\2", key).lower()
         self.native_value = native_value
+        self.description: str = None
+        self.placeholders: list[Placeholder] = None
+
+    def method_signature(self, static=False):
+        signature = tab(1)
+        if static:
+            signature += "@staticmethod\n" + tab(1)
+        signature += "def " + self.snake_key
+        if static:
+            signature += "_static(lang: Lang"
+        else:
+            signature += "(self"
+        if self.placeholders:
+            signature += ", " + ", ".join(p.get_parameter() for p in self.placeholders)
+        signature += "):\n"
+        return signature
+
+    def docstring(self):
+        doc = tab(2) + f'"""\n{tab(2)}`{self.native_value}`\n'
+
+        if self.description:
+            doc += f"\n{tab(2)}Description: {self.description}\n"
+
+        if self.placeholders:
+            doc += f"\n{tab(2)}Placeholders:\n"
+            for p in self.placeholders:
+                doc += tab(3) + p.name + ": "
+                if type(p) is Placeholder:
+                    doc += "String\n"
+                elif type(p) is PlaceholderNum:
+                    if not p.format:
+                        doc += p.get_type_string() + "\n"
+                    else:
+                        doc += "{\n" + tab(4) + "type: " + p.get_type_string() + "\n"
+                        doc += tab(4) + "format: " + p.format.name + "\n"
+                        if p.example:
+                            doc += tab(4) + "example: " + p.example + "\n"
+                        if p.description:
+                            doc += tab(4) + "description: " + p.description + "\n"
+                        if p.optional_parameters:
+                            doc += tab(4) + "bakedParameters: {\n"
+                            for k, v in p.optional_parameters.items():
+                                doc += tab(5) + f"{k}: {v}\n"
+                            doc += tab(4) + "}\n"
+                        doc += tab(3) + "}\n"
+
+        doc += tab(2) + '"""\n'
+        return doc
+
+    def method_return(self, static=False):
+        ret = tab(2) + "return "
+        if static:
+            ret += "Translator._localize("
+            if self.placeholders:
+                ret += "\n" + tab(3) + "lang,\n" + tab(3) + f'"{self.key}",\n'
+                for p in self.placeholders:
+                    ret += tab(3) + p.get_code() + "\n"
+                ret += tab(2) + ")\n"
+            else:
+                ret += f'lang, "{self.key}")\n'
+        else:
+            ret += f"self.{self.snake_key}_static(self.lang"
+            if self.placeholders:
+                ret += ", " + ", ".join(p.name for p in self.placeholders)
+            ret += ")\n"
+        return ret
+
+    def print_methods(self):
+        methods = "\n" + self.method_signature() + self.docstring() + self.method_return()
+        methods += "\n" + self.method_signature(static=True) + self.docstring() + self.method_return(static=True)
+        return methods
 
     def process_metadata(self, data: dict):
         if "description" in data:
@@ -55,14 +134,13 @@ def generate_localizations(arb_location: str, locales: list[str], target_directo
         if k == "@@locale":
             continue
         if "@" not in k:
+            if k in keys:
+                raise DuplicateKey(f"Key {k} found twice in {primary_arb}")
             keys[k] = ArbKey(k, v)
         elif k[1:] in keys:
             keys[k[1:]].process_metadata(v)
         else:
             raise UnsupportedFormat(f"Expected to find `@{k}` after original `{k}`")
-
-    def tab(n: int):
-        return " " * n * 4
 
     with open(os.path.join(target_directory, "generated_components.py"), "w") as f:
         f.write("from enum import Enum\n")
@@ -103,3 +181,11 @@ class Translator:
         )
 
         # Loop through keys to create instance and static methods
+        print("Generating Keys...")
+        for v in tqdm(keys.values(), ncols=50):
+            f.write(v.print_methods())
+
+    # Check if other locales have arb files, if so, leave them, if not, create them.
+    for l in locales[1:]:
+        if not os.path.exists(new_arb := os.path.join(arb_location, l + ".arb")):
+            shutil.copy(primary_arb, new_arb)

@@ -18,11 +18,11 @@ class Placeholder:
         self.example = None
         self.description = None
 
-    def get_docstring(self) -> str:
-        return " " * 12 + self.name + ": String\n"
+    def get_parameter(self) -> str:
+        return self.name + ": str"
 
     def get_code(self) -> str:
-        return " " * 12 + f'Placeholder("{self.name}").set({self.name}),\n'
+        return f'Placeholder("{self.name}").set({self.name}),'
 
     def set(self, value: str):
         self.value = value
@@ -58,22 +58,11 @@ class PlaceholderNum(Placeholder):
         self.num_type = num_type
         self.optional_parameters = kwargs
 
-    def get_docstring(self) -> str:
-        if not self.format:
-            return " " * 12 + self.name + f": {self.num_type.name}\n"
-        doc = " " * 12 + self.name + ": {\n"
-        doc += " " * 16 + f"type: {self.num_type.name}\n"
-        doc += " " * 16 + f"format: {self.format.name}\n"
-        if self.example:
-            doc += " " * 16 + f"example: {self.example}\n"
-        if self.description:
-            doc += " " * 16 + f"description: {self.description}\n"
-        if self.optional_parameters:
-            doc += " " * 16 + "optionalParameters: {\n"
-            for k, v in self.optional_parameters.items():
-                doc += " " * 20 + f"{k}: {v}\n"
-            doc += " " * 16 + "}\n"
-        return doc + " " * 12 + "}\n"
+    def get_type_string(self):
+        return "int" if self.num_type == NumType.int else "float"
+
+    def get_parameter(self) -> str:
+        return self.name + ": " + self.get_type_string()
 
     def get_code(self) -> str:
         args = [f'"{self.name}"']
@@ -85,7 +74,7 @@ class PlaceholderNum(Placeholder):
             args.extend(
                 k + "=" + (f'"{v}"' if isinstance(v, str) else str(v)) for k, v in self.optional_parameters.items()
             )
-        return " " * 12 + f'Placeholder({", ".join(_ for _ in args)}).set({self.name}),\n'
+        return f'PlaceholderNum({", ".join(_ for _ in args)}).set({self.name}),'
 
     def _round_or_int(self, value: float, digits: int, recurse=True):
         if value == int(value):

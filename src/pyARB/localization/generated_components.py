@@ -32,19 +32,6 @@ class Translator:
         log.error(f"Key `{key}` not found in requested or fallback langs!!!")
         return key
 
-    def no(self):
-        """
-        `No`
-        """
-        return self.no_static(self.lang)
-
-    @staticmethod
-    def no_static(lang: Lang):
-        """
-        `No`
-        """
-        return Translator._localize(lang, "no")
-
     def investment_created_at(self, date: str, time: str):
         """
         `Opened: {date} at {time}`
@@ -108,6 +95,89 @@ class Translator:
             PlaceholderNum("amount", format=NumFormat.compact, num_type=NumType.int).set(amount),
         )
 
+    def no(self):
+        """
+        `No`
+        """
+        return self.no_static(self.lang)
+
+    @staticmethod
+    def no_static(lang: Lang):
+        """
+        `No`
+        """
+        return Translator._localize(lang, "no")
+
+    def cancel(self):
+        """
+        `Cancel`
+
+        Description: Cancel button
+        """
+        return self.cancel_static(self.lang)
+
+    @staticmethod
+    def cancel_static(lang: Lang):
+        """
+        `Cancel`
+
+        Description: Cancel button
+        """
+        return Translator._localize(lang, "cancel")
+
+    def joined_date(self, date: str):
+        """
+        `Joined {date}`
+
+        Description: When a user signed up
+
+        Placeholders:
+            date: String
+        """
+        return self.joined_date_static(self.lang, date)
+
+    @staticmethod
+    def joined_date_static(lang: Lang, date: str):
+        """
+        `Joined {date}`
+
+        Description: When a user signed up
+
+        Placeholders:
+            date: String
+        """
+        return Translator._localize(
+            lang,
+            "joinedDate",
+            Placeholder("date").set(date),
+        )
+
+    def many_items(self, first: str, count: int):
+        """
+        `{first} and {count} others`
+
+        Placeholders:
+            first: String
+            count: int
+        """
+        return self.many_items_static(self.lang, first, count)
+
+    @staticmethod
+    def many_items_static(lang: Lang, first: str, count: int):
+        """
+        `{first} and {count} others`
+
+        Placeholders:
+            first: String
+            count: int
+        """
+        return Translator._localize(
+            lang,
+            "manyItems",
+            Placeholder("first").set(first),
+            PlaceholderNum("count", num_type=NumType.int).set(count),
+        )
+
     def notification_requested_to_follow(self, username: str, count: int):
         """
         `@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!`
@@ -117,7 +187,7 @@ class Translator:
         Placeholders:
             username: String
             count: {
-                type: int,
+                type: int
                 format: compact
             }
         """

@@ -29,7 +29,6 @@ def main():
     )
 
     args = parser.parse_args()
-    print(args)
 
     # Handle the "help" command
     if args.command == "help":

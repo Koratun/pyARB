@@ -4,8 +4,8 @@ import json
 import re
 from tqdm import tqdm
 
-from localize import Placeholder, PlaceholderNum, NumFormat, NumType
-from exceptions import UnsupportedFormat, DuplicateKey
+from pyARB.localize import Placeholder, PlaceholderNum, NumFormat, NumType
+from pyARB.exceptions import UnsupportedFormat, DuplicateKey
 
 
 def tab(n: int):

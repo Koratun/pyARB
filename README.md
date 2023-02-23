@@ -45,3 +45,8 @@ print(Translator.many_items_static(Lang.es_ES, "Juan", 3))
 ```
 
 Docstrings are also provided to show what variables are needed for the translation key so your IDE can show you exactly what each localization is, what it needs, and what it will do.
+
+## Does not yet support
+
+- DateTime and Object types in the .arb specification.
+- The `compactLong` format for number types.

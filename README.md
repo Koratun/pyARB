@@ -46,6 +46,10 @@ print(Translator.many_items_static(Lang.es_ES, "Juan", 3))
 
 Docstrings are also provided to show what variables are needed for the translation key so your IDE can show you exactly what each localization is, what it needs, and what it will do.
 
+## A word on arb files
+
+If you are not sure on how arb files are formatted read through the documentation found on [localizely](https://localizely.com/flutter-arb/)
+
 ## Does not yet support
 
 - DateTime and Object types in the .arb specification.

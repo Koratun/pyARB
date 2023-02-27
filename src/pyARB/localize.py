@@ -9,20 +9,45 @@ from pyARB.exceptions import InvalidFormat
 
 log = Logger("pyARB")
 
+
+def snake_case(text: str):
+    """
+    camelCase or PascalCase to snake_case
+
+    whatAGreatString - what_a_great_string
+    virginIslandsUSA - virgin_islands_usa
+    USANotifications - usa_notifications
+    100kTrendingStatus - 100k_trending_status
+    likeCrossed50k - like_crossed50k
+    """
+    snake = text[0].lower()
+    for i in range(1, len(text)):
+        c = text[i]
+        if c.isupper():
+            if text[i - 1].isupper():
+                if len(text) != i + 1 and not text[i + 1].isupper():
+                    snake += "_"
+            else:
+                snake += "_"
+        snake += c.lower()
+    return snake
+
+
 # Allowed types at the moment: String, int, double, num
 
 
 class Placeholder:
     def __init__(self, name: str):
         self.name = name
+        self.snake_name = snake_case(name)
         self.example = None
         self.description = None
 
     def get_parameter(self) -> str:
-        return self.name + ": str"
+        return self.snake_name + ": str"
 
     def get_code(self) -> str:
-        return f'Placeholder("{self.name}").set({self.name}),'
+        return f'Placeholder("{self.name}").set({self.snake_name}),'
 
     def set(self, value: str):
         self.value = value
@@ -62,7 +87,7 @@ class PlaceholderNum(Placeholder):
         return "int" if self.num_type == NumType.int else "float"
 
     def get_parameter(self) -> str:
-        return self.name + ": " + self.get_type_string()
+        return self.snake_name + ": " + self.get_type_string()
 
     def get_code(self) -> str:
         args = [f'"{self.name}"']
@@ -74,7 +99,7 @@ class PlaceholderNum(Placeholder):
             args.extend(
                 k + "=" + (f'"{v}"' if isinstance(v, str) else str(v)) for k, v in self.optional_parameters.items()
             )
-        return f'PlaceholderNum({", ".join(_ for _ in args)}).set({self.name}),'
+        return f'PlaceholderNum({", ".join(_ for _ in args)}).set({self.snake_name}),'
 
     def _round_or_int(self, value: float, digits: int, recurse=True):
         if value == int(value):

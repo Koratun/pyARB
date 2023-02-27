@@ -1,10 +1,9 @@
 import os
 import shutil
 import json
-import re
 from tqdm import tqdm
 
-from pyARB.localize import Placeholder, PlaceholderNum, NumFormat, NumType
+from pyARB.localize import Placeholder, PlaceholderNum, NumFormat, NumType, snake_case
 from pyARB.exceptions import UnsupportedFormat, DuplicateKey
 
 
@@ -15,7 +14,7 @@ def tab(n: int):
 class ArbKey:
     def __init__(self, key: str, native_value: str):
         self.key = key
-        self.snake_key = re.sub("(.)([A-Z])", r"\1_\2", key).lower()
+        self.snake_key = snake_case(key)
         self.native_value = native_value
         self.description: str = None
         self.placeholders: list[Placeholder] = None

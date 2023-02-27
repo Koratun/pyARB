@@ -18,6 +18,9 @@ if __name__ == "__main__":
     print(t.notification_requested_to_follow("Koratun", 2))
     print(t.notification_requested_to_follow("Koratun", 3))
     print(t.notification_requested_to_follow("Koratun", 1254))
+    print(t.stock_change("AAPL", 0.244267, "profit"))
+    print(t.stock_change("AAPL", 0.244267, "profit", pnl_decimal_digits=1))
+    print(t.stock_change("AAPL", 0.244267, "profit", pnl_decimal_digits=3))
 
     print("\nSpanish translations:")
     print(Translator.followers_count_static(Lang.es_ES, 6851651))

@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 1.1.0 - February 27, 2023
+
+### Features
+
+- Added ability to override the optional parameters of the placeholders from python. Allowing for some dynamic formatting if desired.
+
+### Bug Fixes
+
+- Fixed some edge cases with converting camelCase to snake_case.
+- Parameter names in localization methods are now converted to snake_case instead of staying in camelCase.
+
 ## Version 1.0.5 - February 23, 2023
 
 ### Requirement Fix

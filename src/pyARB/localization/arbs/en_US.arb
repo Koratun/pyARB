@@ -57,5 +57,23 @@
         "format": "compact"
       }
     }
+  },
+  "stockChange": "{stock} has received {pnl} {profitLoss, select, profit{Profit} loss{Loss}, other{Even}}",
+  "@stockChange": {
+    "description": "Show when a stock has changed and by how much",
+    "placeholders": {
+      "stock": {
+        "type": "String"
+      },
+      "pnl": {
+        "type": "double",
+        "format": "decimalPercentPattern",
+        "example": "1,234.56%",
+        "description": "Given the example; this placeholder would have been given the double: 12.3456. It should never receive a negative number. If it would have been negative, make `profitLoss` say `loss`."
+      },
+      "profitLoss": {
+        "type": "String"
+      }
+    }
   }
 }

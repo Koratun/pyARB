@@ -7,7 +7,7 @@ class Lang(Enum):
     es_ES = "es_ES"
 
 
-TRANSLATIONS = read_translations("./src/pyARB/localization/arbs", Lang)
+TRANSLATIONS = read_translations("src/pyARB/localization/arbs", Lang)
 FALLBACK_LANG = Lang.en_US
 
 
@@ -212,4 +212,53 @@ class Translator:
             "notificationRequestedToFollow",
             Placeholder("username").set(username),
             PlaceholderNum("count", format=NumFormat.compact, num_type=NumType.int).set(count),
+        )
+
+    def stock_change(self, stock: str, pnl: float, profit_loss: str, pnl_decimal_digits: int = 2):
+        """
+        `{stock} has received {pnl} {profitLoss, select, profit{Profit} loss{Loss}, other{Even}}`
+
+        Description: Show when a stock has changed and by how much
+
+        Placeholders:
+            stock: String
+            pnl: {
+                type: float
+                format: decimalPercentPattern
+                example: 1,234.56%
+                description: Given the example; this placeholder would have been given the double: 12.3456. It should never receive a negative number. If it would have been negative, make `profitLoss` say `loss`.
+                bakedParameters: {
+                    decimalDigits: 2
+                }
+            }
+            profitLoss: String
+        """
+        return self.stock_change_static(self.lang, stock, pnl, profit_loss, pnl_decimal_digits=pnl_decimal_digits)
+
+    @staticmethod
+    def stock_change_static(lang: Lang, stock: str, pnl: float, profit_loss: str, pnl_decimal_digits: int = 2):
+        """
+        `{stock} has received {pnl} {profitLoss, select, profit{Profit} loss{Loss}, other{Even}}`
+
+        Description: Show when a stock has changed and by how much
+
+        Placeholders:
+            stock: String
+            pnl: {
+                type: float
+                format: decimalPercentPattern
+                example: 1,234.56%
+                description: Given the example; this placeholder would have been given the double: 12.3456. It should never receive a negative number. If it would have been negative, make `profitLoss` say `loss`.
+                bakedParameters: {
+                    decimalDigits: 2
+                }
+            }
+            profitLoss: String
+        """
+        return Translator._localize(
+            lang,
+            "stockChange",
+            Placeholder("stock").set(stock),
+            PlaceholderNum("pnl", format=NumFormat.decimalPercentPattern, num_type=NumType.double, decimalDigits=pnl_decimal_digits).set(pnl),
+            Placeholder("profitLoss").set(profit_loss),
         )

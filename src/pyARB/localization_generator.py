@@ -29,7 +29,14 @@ class ArbKey:
         else:
             signature += "(self"
         if self.placeholders:
-            signature += ", " + ", ".join(p.get_parameter() for p in self.placeholders)
+            params = [p.get_parameter() for p in self.placeholders]
+            params.extend(
+                _
+                for p in self.placeholders
+                if isinstance(p, PlaceholderNum) and p.optional_parameters
+                for _ in p.format_params()
+            )
+            signature += ", " + ", ".join(params)
         signature += "):\n"
         return signature
 
@@ -79,7 +86,14 @@ class ArbKey:
         else:
             ret += f"self.{self.snake_key}_static(self.lang"
             if self.placeholders:
-                ret += ", " + ", ".join(p.name for p in self.placeholders)
+                params = [p.snake_name for p in self.placeholders]
+                params.extend(
+                    (a := p.snake_name + "_" + snake_case(k)) + "=" + a
+                    for p in self.placeholders
+                    if isinstance(p, PlaceholderNum) and p.optional_parameters
+                    for k in p.optional_parameters.keys()
+                )
+                ret += ", " + ", ".join(params)
             ret += ")\n"
         return ret
 

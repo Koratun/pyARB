@@ -81,7 +81,27 @@ class PlaceholderNum(Placeholder):
         super().__init__(name)
         self.format = format
         self.num_type = num_type
-        self.optional_parameters = kwargs
+        self.optional_parameters = {}
+        if self.format == NumFormat.compactCurrency:
+            self.optional_parameters = {"name": "USD", "decimalDigits": 2}
+        elif self.format == NumFormat.compactSimpleCurrency:
+            self.optional_parameters = {"symbol": "$", "decimalDigits": 2}
+        elif self.format == NumFormat.currency:
+            self.optional_parameters = {"name": "USD", "decimalDigits": 2}
+        elif self.format == NumFormat.decimalPattern:
+            self.optional_parameters = {"decimalDigits": 2}
+        elif self.format == NumFormat.decimalPercentPattern:
+            self.optional_parameters = {"decimalDigits": 2}
+        elif self.format == NumFormat.simpleCurrency:
+            self.optional_parameters = {"symbol": "$", "decimalDigits": 2}
+
+        self.optional_parameters.update(kwargs)
+
+    def format_params(self):
+        return [
+            self.snake_name + "_" + snake_case(k) + ": " + (f'str = "{v}"' if isinstance(v, str) else f"int = {v}")
+            for k, v in self.optional_parameters.items()
+        ]
 
     def get_type_string(self):
         return "int" if self.num_type == NumType.int else "float"
@@ -96,9 +116,7 @@ class PlaceholderNum(Placeholder):
         if self.num_type != NumType.num:
             args.append(f"num_type=NumType.{self.num_type.name}")
         if self.optional_parameters:
-            args.extend(
-                k + "=" + (f'"{v}"' if isinstance(v, str) else str(v)) for k, v in self.optional_parameters.items()
-            )
+            args.extend(k + "=" + self.snake_name + "_" + snake_case(k) for k in self.optional_parameters.keys())
         return f'PlaceholderNum({", ".join(_ for _ in args)}).set({self.snake_name}),'
 
     def _round_or_int(self, value: float, digits: int, recurse=True):
@@ -129,35 +147,24 @@ class PlaceholderNum(Placeholder):
 
     def get(self) -> str:
         value = self.value
+        options = self.optional_parameters
         if self.format == NumFormat.compact:
             return self._compact(value, 1)
         elif self.format == NumFormat.compactCurrency:
-            options = {"name": "USD", "decimalDigits": 2}
-            options.update(self.optional_parameters)
             return options["name"] + self._compact(value, options["decimalDigits"])
         elif self.format == NumFormat.compactSimpleCurrency:
-            options = {"symbol": "$", "decimalDigits": 2}
-            options.update(self.optional_parameters)
             return options["symbol"] + self._compact(value, options["decimalDigits"])
         elif self.format == NumFormat.currency:
-            options = {"name": "USD", "decimalDigits": 2}
-            options.update(self.optional_parameters)
             return options["name"] + self._readable_long(value, options["decimalDigits"])
         elif self.format == NumFormat.decimalPattern:
-            options = {"decimalDigits": 2}
-            options.update(self.optional_parameters)
             return self._readable_long(value, options["decimalDigits"])
         elif self.format == NumFormat.decimalPercentPattern:
-            options = {"decimalDigits": 2}
-            options.update(self.optional_parameters)
             return self._readable_long(value * 100, options["decimalDigits"]) + "%"
         elif self.format == NumFormat.percentPattern:
             return self._readable_long(value * 100, 0) + "%"
         elif self.format == NumFormat.scientificPattern:
             return f"{value:.2e}"
         elif self.format == NumFormat.simpleCurrency:
-            options = {"symbol": "$", "decimalDigits": 2}
-            options.update(self.optional_parameters)
             return options["symbol"] + self._readable_long(value, options["decimalDigits"])
         return f"{value:,}"
 

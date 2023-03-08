@@ -32,6 +32,266 @@ class Translator:
         log.error(f"Key `{key}` not found in requested or fallback langs!!!")
         return key
 
+    def united_states(self):
+        """
+        `United States`
+        """
+        return self.united_states_static(self.lang)
+
+    @staticmethod
+    def united_states_static(lang: Lang):
+        """
+        `United States`
+        """
+        return Translator._localize(lang, "unitedStates")
+
+    def puerto_rico(self):
+        """
+        `Puerto Rico`
+        """
+        return self.puerto_rico_static(self.lang)
+
+    @staticmethod
+    def puerto_rico_static(lang: Lang):
+        """
+        `Puerto Rico`
+        """
+        return Translator._localize(lang, "puertoRico")
+
+    def canada(self):
+        """
+        `Canada`
+        """
+        return self.canada_static(self.lang)
+
+    @staticmethod
+    def canada_static(lang: Lang):
+        """
+        `Canada`
+        """
+        return Translator._localize(lang, "canada")
+
+    def mexico(self):
+        """
+        `Mexico`
+        """
+        return self.mexico_static(self.lang)
+
+    @staticmethod
+    def mexico_static(lang: Lang):
+        """
+        `Mexico`
+        """
+        return Translator._localize(lang, "mexico")
+
+    def virgin_islands_british(self):
+        """
+        `Virgin Islands, British`
+        """
+        return self.virgin_islands_british_static(self.lang)
+
+    @staticmethod
+    def virgin_islands_british_static(lang: Lang):
+        """
+        `Virgin Islands, British`
+        """
+        return Translator._localize(lang, "virginIslandsBritish")
+
+    def virgin_islands_us(self):
+        """
+        `Virgin Islands, US`
+        """
+        return self.virgin_islands_us_static(self.lang)
+
+    @staticmethod
+    def virgin_islands_us_static(lang: Lang):
+        """
+        `Virgin Islands, US`
+        """
+        return Translator._localize(lang, "virginIslandsUS")
+
+    def united_kingdom(self):
+        """
+        `United Kingdom`
+        """
+        return self.united_kingdom_static(self.lang)
+
+    @staticmethod
+    def united_kingdom_static(lang: Lang):
+        """
+        `United Kingdom`
+        """
+        return Translator._localize(lang, "unitedKingdom")
+
+    def france(self):
+        """
+        `France`
+        """
+        return self.france_static(self.lang)
+
+    @staticmethod
+    def france_static(lang: Lang):
+        """
+        `France`
+        """
+        return Translator._localize(lang, "france")
+
+    def switzerland(self):
+        """
+        `Switzerland`
+        """
+        return self.switzerland_static(self.lang)
+
+    @staticmethod
+    def switzerland_static(lang: Lang):
+        """
+        `Switzerland`
+        """
+        return Translator._localize(lang, "switzerland")
+
+    def bulgaria(self):
+        """
+        `Bulgaria`
+        """
+        return self.bulgaria_static(self.lang)
+
+    @staticmethod
+    def bulgaria_static(lang: Lang):
+        """
+        `Bulgaria`
+        """
+        return Translator._localize(lang, "bulgaria")
+
+    def estonia(self):
+        """
+        `Estonia`
+        """
+        return self.estonia_static(self.lang)
+
+    @staticmethod
+    def estonia_static(lang: Lang):
+        """
+        `Estonia`
+        """
+        return Translator._localize(lang, "estonia")
+
+    def greece(self):
+        """
+        `Greece`
+        """
+        return self.greece_static(self.lang)
+
+    @staticmethod
+    def greece_static(lang: Lang):
+        """
+        `Greece`
+        """
+        return Translator._localize(lang, "greece")
+
+    def latvia(self):
+        """
+        `Latvia`
+        """
+        return self.latvia_static(self.lang)
+
+    @staticmethod
+    def latvia_static(lang: Lang):
+        """
+        `Latvia`
+        """
+        return Translator._localize(lang, "latvia")
+
+    def spain(self):
+        """
+        `Spain`
+        """
+        return self.spain_static(self.lang)
+
+    @staticmethod
+    def spain_static(lang: Lang):
+        """
+        `Spain`
+        """
+        return Translator._localize(lang, "spain")
+
+    def hungary(self):
+        """
+        `Hungary`
+        """
+        return self.hungary_static(self.lang)
+
+    @staticmethod
+    def hungary_static(lang: Lang):
+        """
+        `Hungary`
+        """
+        return Translator._localize(lang, "hungary")
+
+    def romania(self):
+        """
+        `Romania`
+        """
+        return self.romania_static(self.lang)
+
+    @staticmethod
+    def romania_static(lang: Lang):
+        """
+        `Romania`
+        """
+        return Translator._localize(lang, "romania")
+
+    def sweden(self):
+        """
+        `Sweden`
+        """
+        return self.sweden_static(self.lang)
+
+    @staticmethod
+    def sweden_static(lang: Lang):
+        """
+        `Sweden`
+        """
+        return Translator._localize(lang, "sweden")
+
+    def austria(self):
+        """
+        `Austria`
+        """
+        return self.austria_static(self.lang)
+
+    @staticmethod
+    def austria_static(lang: Lang):
+        """
+        `Austria`
+        """
+        return Translator._localize(lang, "austria")
+
+    def croatia(self):
+        """
+        `Croatia`
+        """
+        return self.croatia_static(self.lang)
+
+    @staticmethod
+    def croatia_static(lang: Lang):
+        """
+        `Croatia`
+        """
+        return Translator._localize(lang, "croatia")
+
+    def finland_aland_islands(self):
+        """
+        `Finland/Aland Islands`
+        """
+        return self.finland_aland_islands_static(self.lang)
+
+    @staticmethod
+    def finland_aland_islands_static(lang: Lang):
+        """
+        `Finland/Aland Islands`
+        """
+        return Translator._localize(lang, "finlandAlandIslands")
+
     def investment_created_at(self, date: str, time: str):
         """
         `Opened: {date} at {time}`

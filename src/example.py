@@ -25,6 +25,7 @@ if __name__ == "__main__":
     print("\nSpanish translations:")
     print(Translator.followers_count_static(Lang.es_ES, 6851651))
     t = Translator(Lang.es_ES)
+    print(t.france())
     print(t.no())
     print(t.investment_created_at("01/01/2023", "4:30 PM"))
     print(t.followers_count(1550))

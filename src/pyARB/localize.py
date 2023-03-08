@@ -177,7 +177,7 @@ def read_translations(arb_location: str, languages: Type[Enum]):
             log.warn(f"{lang.name}.arb not found in {arb_location}; using fallback lang")
         else:
             translations[lang] = {}
-            with open(arb_file, "r") as f:
+            with open(arb_file, "r", encoding="utf-8") as f:
                 arb: dict[str, str] = json.loads(f.read())
             for k, v in arb.items():
                 if "@" not in k:

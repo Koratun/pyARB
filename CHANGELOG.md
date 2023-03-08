@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.1.1 - March 8, 2023
+
+### Bug Fixes
+
+- Loading translation files now uses UTF-8 encoding to allow for characters outside the English alphabet.
+
 ## Version 1.1.0 - February 27, 2023
 
 ### Features

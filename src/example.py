@@ -1,7 +1,7 @@
 from pyARB.localization_generator import generate_localizations
 
 if __name__ == "__main__":
-    generate_localizations("src/pyARB/localization/arbs", ["en_US", "es_ES"])
+    generate_localizations("src/pyARB/localization/arbs", ["en_US", "es_ES", "pt_BR"])
 
     from pyARB.localization.generated_components import Translator, Lang
 
@@ -23,8 +23,8 @@ if __name__ == "__main__":
     print(t.stock_change("AAPL", 0.244267, "profit", pnl_decimal_digits=3))
 
     print("\nSpanish translations:")
-    print(Translator.followers_count_static(Lang.es_ES, 6851651))
-    t = Translator(Lang.es_ES)
+    print(Translator.followers_count_static("es_ES", 6851651))
+    t = Translator("es_ES")
     print(t.france())
     print(t.no())
     print(t.investment_created_at("01/01/2023", "4:30 PM"))

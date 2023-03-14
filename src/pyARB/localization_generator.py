@@ -25,7 +25,7 @@ class ArbKey:
             signature += "@staticmethod\n" + tab(1)
         signature += "def " + self.snake_key
         if static:
-            signature += "_static(lang: Lang"
+            signature += "_static(lang: Union[Lang, str]"
         else:
             signature += "(self"
         if self.placeholders:
@@ -75,6 +75,7 @@ class ArbKey:
     def method_return(self, static=False):
         ret = tab(2) + "return "
         if static:
+            ret = tab(2) + "if isinstance(lang, str):\n" + tab(3) + "lang = Lang(lang)\n" + ret
             ret += "Translator._localize("
             if self.placeholders:
                 ret += "\n" + tab(3) + "lang,\n" + tab(3) + f'"{self.key}",\n'
@@ -164,6 +165,7 @@ def generate_localizations(arb_location: str, locales: list[str], target_directo
 
     with open(os.path.join(target_directory, "generated_components.py"), "w") as f:
         f.write("from enum import Enum\n")
+        f.write("from typing import Union\n")
         f.write(
             "from pyARB.localize import log, read_translations, inject_placeholders, Placeholder, PlaceholderNum, NumFormat, NumType\n\n\n"
         )
@@ -178,7 +180,9 @@ def generate_localizations(arb_location: str, locales: list[str], target_directo
         f.write(
             """
 class Translator:
-    def __init__(self, lang: Lang):
+    def __init__(self, lang: Union[Lang, str]):
+        if isinstance(lang, str):
+            lang = Lang(lang)
         self.lang = lang
 
     @staticmethod

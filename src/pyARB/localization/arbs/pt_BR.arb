@@ -1,0 +1,99 @@
+{
+  "unitedStates": "Estados Unidos",
+  "puertoRico": "Porto Rico",
+  "canada": "Canadá",
+  "mexico": "México",
+  "virginIslandsBritish": "Ilhas Virgens Britânicas",
+  "virginIslandsUS": "Ilhas Virgens Americanas",
+  "unitedKingdom": "Reino Unido",
+  "france": "França",
+  "switzerland": "Suíça",
+  "bulgaria": "Bulgária",
+  "estonia": "Estônia",
+  "greece": "Grécia",
+  "latvia": "Letônia",
+  "spain": "Espanha",
+  "hungary": "Hungria",
+  "romania": "Romênia",
+  "sweden": "Suécia",
+  "austria": "Áustria",
+  "croatia": "Croácia",
+  "finlandAlandIslands": "Ilhas da Finlândia/Aland",
+  "investmentCreatedAt": "Opened: {date} at {time}",
+  "@investmentCreatedAt": {
+    "description": "Displays a position's creation date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "followersCount": "{amount} Followers",
+  "@followersCount": {
+    "description": "Displays user's follower count",
+    "placeholders": {
+      "amount": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "no": "No",
+  "@no": {},
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "joinedDate": "Joined {date}",
+  "@joinedDate": {
+    "description": "When a user signed up",
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "manyItems": "{first} and {count} others",
+  "@manyItems": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationRequestedToFollow": "@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!",
+  "@notificationRequestedToFollow": {
+    "description": "When 1 or more users request to follow someone they receive this notification",
+    "placeholders": {
+      "username": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  "stockChange": "{stock} has received {pnl} {profitLoss, select, profit{Profit} loss{Loss}, other{Even}}",
+  "@stockChange": {
+    "description": "Show when a stock has changed and by how much",
+    "placeholders": {
+      "stock": {
+        "type": "String"
+      },
+      "pnl": {
+        "type": "double",
+        "format": "decimalPercentPattern",
+        "example": "1,234.56%",
+        "description": "Given the example; this placeholder would have been given the double: 12.3456. It should never receive a negative number. If it would have been negative, make `profitLoss` say `loss`."
+      },
+      "profitLoss": {
+        "type": "String"
+      }
+    }
+  }
+}

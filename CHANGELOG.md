@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 1.2.0 - March 14, 2023
+
+### Features
+
+- Allow Translator class to be instantiated and its static methods to called with the string equivalents of the `Lang` enum containing the accepted localizations. For example:
+
+```python
+# Previously only this was allowed
+t = Translator(Lang.en_US)
+Translator.many_items_static(Lang.en_US, "Bob", 4)
+
+# Now accepts either the below or the above
+t = Translator("en_US")
+Translator.many_items_static("en_US", "Bob", 4)
+```
+
 ## Version 1.1.1 - March 8, 2023
 
 ### Bug Fixes

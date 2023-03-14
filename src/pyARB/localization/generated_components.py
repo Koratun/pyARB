@@ -1,10 +1,12 @@
 from enum import Enum
+from typing import Union
 from pyARB.localize import log, read_translations, inject_placeholders, Placeholder, PlaceholderNum, NumFormat, NumType
 
 
 class Lang(Enum):
     en_US = "en_US"
     es_ES = "es_ES"
+    pt_BR = "pt_BR"
 
 
 TRANSLATIONS = read_translations("src/pyARB/localization/arbs", Lang)
@@ -12,7 +14,9 @@ FALLBACK_LANG = Lang.en_US
 
 
 class Translator:
-    def __init__(self, lang: Lang):
+    def __init__(self, lang: Union[Lang, str]):
+        if isinstance(lang, str):
+            lang = Lang(lang)
         self.lang = lang
 
     @staticmethod
@@ -39,10 +43,12 @@ class Translator:
         return self.united_states_static(self.lang)
 
     @staticmethod
-    def united_states_static(lang: Lang):
+    def united_states_static(lang: Union[Lang, str]):
         """
         `United States`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "unitedStates")
 
     def puerto_rico(self):
@@ -52,10 +58,12 @@ class Translator:
         return self.puerto_rico_static(self.lang)
 
     @staticmethod
-    def puerto_rico_static(lang: Lang):
+    def puerto_rico_static(lang: Union[Lang, str]):
         """
         `Puerto Rico`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "puertoRico")
 
     def canada(self):
@@ -65,10 +73,12 @@ class Translator:
         return self.canada_static(self.lang)
 
     @staticmethod
-    def canada_static(lang: Lang):
+    def canada_static(lang: Union[Lang, str]):
         """
         `Canada`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "canada")
 
     def mexico(self):
@@ -78,10 +88,12 @@ class Translator:
         return self.mexico_static(self.lang)
 
     @staticmethod
-    def mexico_static(lang: Lang):
+    def mexico_static(lang: Union[Lang, str]):
         """
         `Mexico`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "mexico")
 
     def virgin_islands_british(self):
@@ -91,10 +103,12 @@ class Translator:
         return self.virgin_islands_british_static(self.lang)
 
     @staticmethod
-    def virgin_islands_british_static(lang: Lang):
+    def virgin_islands_british_static(lang: Union[Lang, str]):
         """
         `Virgin Islands, British`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "virginIslandsBritish")
 
     def virgin_islands_us(self):
@@ -104,10 +118,12 @@ class Translator:
         return self.virgin_islands_us_static(self.lang)
 
     @staticmethod
-    def virgin_islands_us_static(lang: Lang):
+    def virgin_islands_us_static(lang: Union[Lang, str]):
         """
         `Virgin Islands, US`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "virginIslandsUS")
 
     def united_kingdom(self):
@@ -117,10 +133,12 @@ class Translator:
         return self.united_kingdom_static(self.lang)
 
     @staticmethod
-    def united_kingdom_static(lang: Lang):
+    def united_kingdom_static(lang: Union[Lang, str]):
         """
         `United Kingdom`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "unitedKingdom")
 
     def france(self):
@@ -130,10 +148,12 @@ class Translator:
         return self.france_static(self.lang)
 
     @staticmethod
-    def france_static(lang: Lang):
+    def france_static(lang: Union[Lang, str]):
         """
         `France`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "france")
 
     def switzerland(self):
@@ -143,10 +163,12 @@ class Translator:
         return self.switzerland_static(self.lang)
 
     @staticmethod
-    def switzerland_static(lang: Lang):
+    def switzerland_static(lang: Union[Lang, str]):
         """
         `Switzerland`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "switzerland")
 
     def bulgaria(self):
@@ -156,10 +178,12 @@ class Translator:
         return self.bulgaria_static(self.lang)
 
     @staticmethod
-    def bulgaria_static(lang: Lang):
+    def bulgaria_static(lang: Union[Lang, str]):
         """
         `Bulgaria`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "bulgaria")
 
     def estonia(self):
@@ -169,10 +193,12 @@ class Translator:
         return self.estonia_static(self.lang)
 
     @staticmethod
-    def estonia_static(lang: Lang):
+    def estonia_static(lang: Union[Lang, str]):
         """
         `Estonia`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "estonia")
 
     def greece(self):
@@ -182,10 +208,12 @@ class Translator:
         return self.greece_static(self.lang)
 
     @staticmethod
-    def greece_static(lang: Lang):
+    def greece_static(lang: Union[Lang, str]):
         """
         `Greece`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "greece")
 
     def latvia(self):
@@ -195,10 +223,12 @@ class Translator:
         return self.latvia_static(self.lang)
 
     @staticmethod
-    def latvia_static(lang: Lang):
+    def latvia_static(lang: Union[Lang, str]):
         """
         `Latvia`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "latvia")
 
     def spain(self):
@@ -208,10 +238,12 @@ class Translator:
         return self.spain_static(self.lang)
 
     @staticmethod
-    def spain_static(lang: Lang):
+    def spain_static(lang: Union[Lang, str]):
         """
         `Spain`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "spain")
 
     def hungary(self):
@@ -221,10 +253,12 @@ class Translator:
         return self.hungary_static(self.lang)
 
     @staticmethod
-    def hungary_static(lang: Lang):
+    def hungary_static(lang: Union[Lang, str]):
         """
         `Hungary`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "hungary")
 
     def romania(self):
@@ -234,10 +268,12 @@ class Translator:
         return self.romania_static(self.lang)
 
     @staticmethod
-    def romania_static(lang: Lang):
+    def romania_static(lang: Union[Lang, str]):
         """
         `Romania`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "romania")
 
     def sweden(self):
@@ -247,10 +283,12 @@ class Translator:
         return self.sweden_static(self.lang)
 
     @staticmethod
-    def sweden_static(lang: Lang):
+    def sweden_static(lang: Union[Lang, str]):
         """
         `Sweden`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "sweden")
 
     def austria(self):
@@ -260,10 +298,12 @@ class Translator:
         return self.austria_static(self.lang)
 
     @staticmethod
-    def austria_static(lang: Lang):
+    def austria_static(lang: Union[Lang, str]):
         """
         `Austria`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "austria")
 
     def croatia(self):
@@ -273,10 +313,12 @@ class Translator:
         return self.croatia_static(self.lang)
 
     @staticmethod
-    def croatia_static(lang: Lang):
+    def croatia_static(lang: Union[Lang, str]):
         """
         `Croatia`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "croatia")
 
     def finland_aland_islands(self):
@@ -286,10 +328,12 @@ class Translator:
         return self.finland_aland_islands_static(self.lang)
 
     @staticmethod
-    def finland_aland_islands_static(lang: Lang):
+    def finland_aland_islands_static(lang: Union[Lang, str]):
         """
         `Finland/Aland Islands`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "finlandAlandIslands")
 
     def investment_created_at(self, date: str, time: str):
@@ -305,7 +349,7 @@ class Translator:
         return self.investment_created_at_static(self.lang, date, time)
 
     @staticmethod
-    def investment_created_at_static(lang: Lang, date: str, time: str):
+    def investment_created_at_static(lang: Union[Lang, str], date: str, time: str):
         """
         `Opened: {date} at {time}`
 
@@ -315,6 +359,8 @@ class Translator:
             date: String
             time: String
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "investmentCreatedAt",
@@ -337,7 +383,7 @@ class Translator:
         return self.followers_count_static(self.lang, amount)
 
     @staticmethod
-    def followers_count_static(lang: Lang, amount: int):
+    def followers_count_static(lang: Union[Lang, str], amount: int):
         """
         `{amount} Followers`
 
@@ -349,6 +395,8 @@ class Translator:
                 format: compact
             }
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "followersCount",
@@ -362,10 +410,12 @@ class Translator:
         return self.no_static(self.lang)
 
     @staticmethod
-    def no_static(lang: Lang):
+    def no_static(lang: Union[Lang, str]):
         """
         `No`
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "no")
 
     def cancel(self):
@@ -377,12 +427,14 @@ class Translator:
         return self.cancel_static(self.lang)
 
     @staticmethod
-    def cancel_static(lang: Lang):
+    def cancel_static(lang: Union[Lang, str]):
         """
         `Cancel`
 
         Description: Cancel button
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(lang, "cancel")
 
     def joined_date(self, date: str):
@@ -397,7 +449,7 @@ class Translator:
         return self.joined_date_static(self.lang, date)
 
     @staticmethod
-    def joined_date_static(lang: Lang, date: str):
+    def joined_date_static(lang: Union[Lang, str], date: str):
         """
         `Joined {date}`
 
@@ -406,6 +458,8 @@ class Translator:
         Placeholders:
             date: String
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "joinedDate",
@@ -423,7 +477,7 @@ class Translator:
         return self.many_items_static(self.lang, first, count)
 
     @staticmethod
-    def many_items_static(lang: Lang, first: str, count: int):
+    def many_items_static(lang: Union[Lang, str], first: str, count: int):
         """
         `{first} and {count} others`
 
@@ -431,6 +485,8 @@ class Translator:
             first: String
             count: int
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "manyItems",
@@ -454,7 +510,7 @@ class Translator:
         return self.notification_requested_to_follow_static(self.lang, username, count)
 
     @staticmethod
-    def notification_requested_to_follow_static(lang: Lang, username: str, count: int):
+    def notification_requested_to_follow_static(lang: Union[Lang, str], username: str, count: int):
         """
         `@{username} {count, plural, offset:1 zero{has requested to follow you} one{and 1 other user have requested to follow you} other{and # other users have requested to follow you}}!`
 
@@ -467,6 +523,8 @@ class Translator:
                 format: compact
             }
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "notificationRequestedToFollow",
@@ -496,7 +554,7 @@ class Translator:
         return self.stock_change_static(self.lang, stock, pnl, profit_loss, pnl_decimal_digits=pnl_decimal_digits)
 
     @staticmethod
-    def stock_change_static(lang: Lang, stock: str, pnl: float, profit_loss: str, pnl_decimal_digits: int = 2):
+    def stock_change_static(lang: Union[Lang, str], stock: str, pnl: float, profit_loss: str, pnl_decimal_digits: int = 2):
         """
         `{stock} has received {pnl} {profitLoss, select, profit{Profit} loss{Loss}, other{Even}}`
 
@@ -515,6 +573,8 @@ class Translator:
             }
             profitLoss: String
         """
+        if isinstance(lang, str):
+            lang = Lang(lang)
         return Translator._localize(
             lang,
             "stockChange",
